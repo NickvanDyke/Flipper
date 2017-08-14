@@ -2,7 +2,9 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
+      <module name="Flipper_main" target="1.8" />
       <module name="flipper_main" target="1.8" />
+      <module name="Flipper_test" target="1.8" />
       <module name="flipper_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>

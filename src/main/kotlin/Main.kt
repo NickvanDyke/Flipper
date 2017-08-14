@@ -1,7 +1,6 @@
 import org.jetbrains.ktor.routing.*
 import org.jetbrains.ktor.application.*
 import org.jetbrains.ktor.content.default
-import org.jetbrains.ktor.content.file
 import org.jetbrains.ktor.content.files
 import org.jetbrains.ktor.content.static
 import org.jetbrains.ktor.features.CallLogging
@@ -10,8 +9,6 @@ import org.jetbrains.ktor.host.*
 import org.jetbrains.ktor.http.*
 import org.jetbrains.ktor.netty.Netty
 import org.jetbrains.ktor.response.*
-import org.jetbrains.ktor.sessions.get
-import org.jetbrains.ktor.sessions.sessions
 import org.jetbrains.ktor.websocket.WebSockets
 import org.jetbrains.ktor.websocket.webSocket
 

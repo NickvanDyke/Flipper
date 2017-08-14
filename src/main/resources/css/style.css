@@ -34,6 +34,7 @@ body {
     background-color: deepskyblue;
     -webkit-transition: .4s;
     transition: .4s;
+    border-style: solid;
 }
 
 .slider:before {
@@ -41,8 +42,8 @@ body {
     content: "";
     height: 56px;
     width: 56px;
-    left: 4px;
-    bottom: 4px;
+    left: 3px;
+    bottom: 3px;
     background-color: white;
     -webkit-transition: .4s;
     transition: .4s;
@@ -57,9 +58,9 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-    -webkit-transform: translateX(64px);
-    -ms-transform: translateX(64px);
-    transform: translateX(64px);
+    -webkit-transform: translateX(63px);
+    -ms-transform: translateX(63px);
+    transform: translateX(63px);
 }
 
 /* Rounded sliders */

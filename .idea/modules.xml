@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/flipper.iml" filepath="$PROJECT_DIR$/.idea/modules/flipper.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/flipper_main.iml" filepath="$PROJECT_DIR$/.idea/modules/flipper_main.iml" group="flipper" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/flipper_test.iml" filepath="$PROJECT_DIR$/.idea/modules/flipper_test.iml" group="flipper" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Flipper.iml" filepath="$PROJECT_DIR$/.idea/modules/Flipper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Flipper_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Flipper_main.iml" group="Flipper" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Flipper_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Flipper_test.iml" group="Flipper" />
     </modules>
   </component>
 </project>
