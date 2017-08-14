@@ -20,7 +20,6 @@ function connectWebSocket() {
     };
 
     socket.onclose = function() {
-        socket.send("close");
         console.log("socket closed");
         setTimeout(connectWebSocket, 5000);
     };
