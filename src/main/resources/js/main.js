@@ -1,4 +1,11 @@
 var socket = null;
+var switchCheckbox = null;
+
+function onLoad() {
+    connectWebSocket();
+    switchCheckbox = document.getElementById("switch-checkbox");
+    switchCheckbox.onclick = switchClicked
+}
 
 function connectWebSocket() {
     console.log("begin connect");
@@ -13,32 +20,43 @@ function connectWebSocket() {
     };
 
     socket.onclose = function() {
+        socket.send("close");
         console.log("socket closed");
         setTimeout(connectWebSocket, 5000);
     };
 
     socket.onmessage = function(event) {
         var msg = event.data.toString();
-        console.log(msg);
+        if (msg === "true")
+            onTrueReceived();
+        else if (msg === "false")
+            onFalseReceived();
     };
 }
-window.addEventListener("load", connectWebSocket);
+window.addEventListener("load", onLoad);
 
-function onBlue() {
-    sendTogglePost();
-    console.log("onBlue");
+
+function onTrueReceived() {
+    console.log("onTrueReceived");
+    switchCheckbox.checked = true;
 }
 
-function onRed() {
-    sendTogglePost();
-    console.log("onRed");
+function onFalseReceived() {
+    console.log("onFalseReceived");
+    switchCheckbox.checked = false;
 }
 
-function sendTogglePost() {
-    var request = new XMLHttpRequest();
-    request.onload = function() {
-        console.log(request.status)
-    };
-    request.open("POST", "http://" + window.location.host + "/toggle", true);
-    request.send();
+function switchClicked() {
+    switchCheckbox.checked = !switchCheckbox.checked;
+    socket.send(!switchCheckbox.checked);
+    return false;
 }
+
+// function sendTogglePost() {
+//     socket.send("toggle");
+//     var request = new XMLHttpRequest();
+//     request.onload = function() {
+//     };
+//     request.open("POST", "http://" + window.location.host + "/toggle", true);
+//     request.send();
+// }

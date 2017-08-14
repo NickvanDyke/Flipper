@@ -22,7 +22,7 @@ body {
     width: 128px;
     height: 64px;
 }
-#switch-label input {display:none;}
+#switch-checkbox { display:none; }
 
 .slider {
     position: absolute;
@@ -31,10 +31,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: deepskyblue;
-    -webkit-transition: .4s;
-    transition: .4s;
-    border-style: solid;
+    background-color: white;
 }
 
 .slider:before {
@@ -42,15 +39,10 @@ body {
     content: "";
     height: 56px;
     width: 56px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
+    left: 4px;
+    bottom: 4px;
     -webkit-transition: .4s;
     transition: .4s;
-}
-
-input:checked + .slider {
-    background-color: orangered;
 }
 
 input:focus + .slider {
@@ -58,9 +50,9 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-    -webkit-transform: translateX(63px);
-    -ms-transform: translateX(63px);
-    transform: translateX(63px);
+    -webkit-transform: translateX(64px);
+    -ms-transform: translateX(64px);
+    transform: translateX(64px);
 }
 
 /* Rounded sliders */
@@ -70,4 +62,11 @@ input:checked + .slider:before {
 
 .slider.round:before {
     border-radius: 50%;
+    background-color: deepskyblue;
 }
+
+input:checked + .slider.round:before {
+    border-radius: 50%;
+    background-color: orangered;
+}
+
