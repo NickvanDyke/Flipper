@@ -1,3 +1,4 @@
+import com.google.gson.Gson
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.channels.consumeEach
@@ -12,11 +13,15 @@ import org.jetbrains.ktor.netty.Netty
 import org.jetbrains.ktor.routing.Routing
 import org.jetbrains.ktor.websocket.*
 
+val gson = Gson()
 var state: Boolean = false
 var trueTime: Long = 0
 var falseTime: Long = 0
 var lastUpdatedAt: Long = System.currentTimeMillis()
 val clients: ArrayList<WebSocketSession> = ArrayList()
+
+var timeString: String = ""
+    get() = "time:$trueTime:$falseTime"
 
 fun main(args: Array<String>) {
     embeddedServer(Netty, 8080) {
@@ -37,7 +42,7 @@ fun main(args: Array<String>) {
             webSocket("/ws") {
                 clients.add(this)
 
-                this.send(Frame.Text(state.toString()))
+                this.send(Frame.Text(gson.toJson(Update(state, trueTime, falseTime))))
 
                 try {
                     incoming.consumeEach { frame ->
@@ -69,8 +74,6 @@ fun handleClientMsg(text: String) {
     else
         falseTime += (System.currentTimeMillis() - lastUpdatedAt)
     lastUpdatedAt = System.currentTimeMillis()
-    println(trueTime)
-    println(falseTime)
     if (state != previousState) {
         updateClients()
     }
@@ -79,6 +82,6 @@ fun handleClientMsg(text: String) {
 fun updateClients() {
     println("updating ${clients.size} clients")
     for (client in clients) {
-        async(CommonPool) { client.send(Frame.Text(state.toString())) }
+        async(CommonPool) { client.send(Frame.Text(gson.toJson(Update(state, trueTime, falseTime)))) }
     }
 }

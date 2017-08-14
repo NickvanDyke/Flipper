@@ -1,8 +1,32 @@
-body {
-    background-color: deepskyblue;
+.text {
+
 }
 
-#bg-right {
+#false-text {
+    display: block;
+    position: relative;
+    top: 50%;
+}
+
+#true-text {
+    display: block;
+    position: relative;
+    top: 50%;
+}
+
+#false-div {
+    background-color: deepskyblue;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 50%;
+    z-index: -1;
+
+    text-align: center;
+}
+
+#true-div {
     background-color: orangered;
     position: fixed;
     top: 0;
@@ -10,6 +34,8 @@ body {
     left: 50%;
     right: 0;
     z-index: -1;
+
+    text-align: center;
 }
 
 #switch-label {

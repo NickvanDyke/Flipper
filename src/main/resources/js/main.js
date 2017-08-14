@@ -1,10 +1,14 @@
 var socket = null;
 var switchCheckbox = null;
+var trueText = null;
+var falseText = null;
 
 function onLoad() {
     connectWebSocket();
     switchCheckbox = document.getElementById("switch-checkbox");
-    switchCheckbox.onclick = switchClicked
+    trueText = document.getElementById("true-text");
+    falseText = document.getElementById("false-text");
+    switchCheckbox.onclick = switchClicked;
 }
 
 function connectWebSocket() {
@@ -25,25 +29,13 @@ function connectWebSocket() {
     };
 
     socket.onmessage = function(event) {
-        var msg = event.data.toString();
-        if (msg === "true")
-            onTrueReceived();
-        else if (msg === "false")
-            onFalseReceived();
+        var json = JSON.parse(event.data.toString());
+        switchCheckbox.checked = json.state;
+        trueText.innerHTML = millisecondsToTimeString(json.trueMs);
+        falseText.innerHTML = millisecondsToTimeString(json.falseMs);
     };
 }
 window.addEventListener("load", onLoad);
-
-
-function onTrueReceived() {
-    console.log("onTrueReceived");
-    switchCheckbox.checked = true;
-}
-
-function onFalseReceived() {
-    console.log("onFalseReceived");
-    switchCheckbox.checked = false;
-}
 
 function switchClicked() {
     switchCheckbox.checked = !switchCheckbox.checked;
@@ -51,11 +43,14 @@ function switchClicked() {
     return false;
 }
 
-// function sendTogglePost() {
-//     socket.send("toggle");
-//     var request = new XMLHttpRequest();
-//     request.onload = function() {
-//     };
-//     request.open("POST", "http://" + window.location.host + "/toggle", true);
-//     request.send();
-// }
+function millisecondsToTimeString(ms) {
+    var days = Math.floor(ms / 86400000);
+    ms -= days * 86400000;
+    var hours = Math.floor(ms / 3600000);
+    ms -= hours * 3600000;
+    var minutes = Math.floor(ms / 60000);
+    ms -= minutes * 60000;
+    var seconds = Math.floor(ms / 1000);
+    ms -= seconds * 1000;
+    return days + "d " + hours + "h " + minutes + "m " + seconds + "s "
+}
