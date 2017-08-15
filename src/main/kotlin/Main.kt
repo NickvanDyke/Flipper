@@ -12,18 +12,25 @@ import org.jetbrains.ktor.host.embeddedServer
 import org.jetbrains.ktor.netty.Netty
 import org.jetbrains.ktor.routing.Routing
 import org.jetbrains.ktor.websocket.*
+import java.util.*
 
 val gson = Gson()
 var state: Boolean = false
-var trueTime: Long = 0
-var falseTime: Long = 0
+var trueMs: Long = 0
+var falseMs: Long = 0
 var lastUpdatedAt: Long = System.currentTimeMillis()
 val clients: ArrayList<WebSocketSession> = ArrayList()
 
-var timeString: String = ""
-    get() = "time:$trueTime:$falseTime"
+var updateJson: String = ""
+    get() = gson.toJson(Update(state, trueMs, falseMs))
 
 fun main(args: Array<String>) {
+    Timer().scheduleAtFixedRate(object : TimerTask() {
+        override fun run() {
+            updateTime()
+            updateClients()
+        }
+    }, 1000, 1000)
     embeddedServer(Netty, 8080) {
         install(DefaultHeaders)
         install(CallLogging)
@@ -42,7 +49,7 @@ fun main(args: Array<String>) {
             webSocket("/ws") {
                 clients.add(this)
 
-                this.send(Frame.Text(gson.toJson(Update(state, trueTime, falseTime))))
+                this.send(Frame.Text(updateJson))
 
                 try {
                     incoming.consumeEach { frame ->
@@ -68,20 +75,23 @@ fun handleClientMsg(text: String) {
         state = false
     else
         return
-
-    if (previousState)
-        trueTime += (System.currentTimeMillis() - lastUpdatedAt)
-    else
-        falseTime += (System.currentTimeMillis() - lastUpdatedAt)
-    lastUpdatedAt = System.currentTimeMillis()
+    updateTime()
     if (state != previousState) {
         updateClients()
     }
 }
 
+fun updateTime() {
+    if (state)
+        trueMs += (System.currentTimeMillis() - lastUpdatedAt)
+    else
+        falseMs += (System.currentTimeMillis() - lastUpdatedAt)
+    lastUpdatedAt = System.currentTimeMillis()
+}
+
 fun updateClients() {
     println("updating ${clients.size} clients")
     for (client in clients) {
-        async(CommonPool) { client.send(Frame.Text(gson.toJson(Update(state, trueTime, falseTime)))) }
+        async(CommonPool) { client.send(Frame.Text(updateJson)) }
     }
 }
