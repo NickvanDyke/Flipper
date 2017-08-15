@@ -9,8 +9,11 @@ import org.jetbrains.ktor.content.static
 import org.jetbrains.ktor.features.CallLogging
 import org.jetbrains.ktor.features.DefaultHeaders
 import org.jetbrains.ktor.host.embeddedServer
+import org.jetbrains.ktor.http.ContentType
 import org.jetbrains.ktor.netty.Netty
+import org.jetbrains.ktor.response.respondText
 import org.jetbrains.ktor.routing.Routing
+import org.jetbrains.ktor.routing.get
 import org.jetbrains.ktor.websocket.*
 import java.util.*
 
@@ -41,10 +44,9 @@ fun main(args: Array<String>) {
                 default("index.html")
             }
 
-//            post("/toggle") {
-//                toggle()
-//                call.respondText("Hello, world!", ContentType.Text.Html)
-//            }
+            get("/status") {
+                call.respondText(updateJson, ContentType.Application.Json)
+            }
 
             webSocket("/ws") {
                 clients.add(this)
@@ -55,7 +57,6 @@ fun main(args: Array<String>) {
                     incoming.consumeEach { frame ->
                         if (frame is Frame.Text) {
                             val text = frame.readText()
-                            println("message from client: $text")
                             handleClientMsg(text)
                         }
                     }
@@ -90,7 +91,6 @@ fun updateTime() {
 }
 
 fun updateClients() {
-    println("updating ${clients.size} clients")
     for (client in clients) {
         async(CommonPool) { client.send(Frame.Text(updateJson)) }
     }
